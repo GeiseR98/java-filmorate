@@ -7,18 +7,18 @@ import lombok.NonNull;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 @Data
 public class User{
-    @NonNull
     private int id;
     @Email(message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
     @NotBlank(message = "логин не может быть пустым и содержать пробелы")
     private String login;
     private String name;
-    @Past(message = "дата рождения не может быть в будущем")
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @PastOrPresent(message = "дата рождения не может быть в будущем")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 }
