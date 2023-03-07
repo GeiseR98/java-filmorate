@@ -10,9 +10,9 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Data
-public class User extends Model{
+public class User{
     @NonNull
-    private final int id;
+    private int id;
     @Email(message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
     @NotBlank(message = "логин не может быть пустым и содержать пробелы")
