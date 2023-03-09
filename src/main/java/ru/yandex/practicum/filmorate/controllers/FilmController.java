@@ -31,6 +31,7 @@ public class FilmController {
     @PostMapping(value = "/films")
     public Film addFilm(@Valid @RequestBody Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            log.debug("не прошла валидация по дате релиза");
             throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
         }
         ++id;
@@ -49,7 +50,7 @@ public class FilmController {
             log.debug("Фильм под номером: " + film.getId() + " обновлён");
             return film;
         } else {
-            return addFilm(film);
+            throw new ValidationException("Фильм под данным номером не найден");
         }
     }
 }

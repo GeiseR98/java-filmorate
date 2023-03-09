@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -45,7 +46,8 @@ public class UserController {
             log.debug("Данные пользователя под номером: " + user.getId() + " обновлены");
             return user;
         } else {
-            return addUser(user);
+            log.debug("данный пользователь не обнаружен");
+            throw new ValidationException("данный пользователь не обнаружен");
         }
     }
 }

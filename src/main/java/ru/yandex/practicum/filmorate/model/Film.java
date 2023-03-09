@@ -21,5 +21,5 @@ public class Film {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private final LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
-    private final Duration duration;
+    private final Long duration;
 }
