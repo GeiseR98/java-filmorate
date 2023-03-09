@@ -20,12 +20,8 @@ public class FilmController {
 
     @GetMapping("/films")
     public List<Film> findAll() {
-        List<Film> list = new ArrayList<>();
-        for (Integer key : films.keySet()) {
-            list.add(films.get(key));
-        }
         log.debug("запрос всех фильмов");
-        return list;
+        return new ArrayList<Film>(films.values());
     }
 
     @PostMapping(value = "/films")
