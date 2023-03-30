@@ -23,4 +23,6 @@ public class User{
     @PastOrPresent(message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+
 }
