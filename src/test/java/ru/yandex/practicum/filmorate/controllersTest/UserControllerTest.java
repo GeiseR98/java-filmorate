@@ -6,6 +6,8 @@ import ru.yandex.practicum.filmorate.controllers.UserController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,8 +20,8 @@ class UserControllerTest {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @BeforeEach
     public void beforeEach() {
-        controller = new UserController();
-        controller.addUser(User.builder()
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
+        controller.createUser(User.builder()
                 .email("adeptYaPr@new.org")
                         .login("login")
                         .name("name")
@@ -28,16 +30,16 @@ class UserControllerTest {
     }
     @Test
     public void shouldReturnAListOfUsers() {
-        assertEquals(1, controller.findAll().size());
+        assertEquals(1, controller.getAllUsers().size());
     }
     @Test
     public void shouldUseAUsernameInsteadOfANameWithAnEmptyNameValue() {
-        controller.addUser(User.builder()
+        controller.createUser(User.builder()
                 .email("adeptYaPr@new.org")
                 .login("login")
                 .birthday(LocalDate.of(1990,6,24))
                 .build());
-        assertEquals("login", controller.findAll().get(1).getName());
+        assertEquals("login", controller.getAllUsers().get(1).getName());
     }
     @Test
     public void shouldReplaceTheUser() {
@@ -48,9 +50,9 @@ class UserControllerTest {
                         .name("new name")
                         .birthday(LocalDate.of(1990,6,24))
             .build());
-        assertEquals(1, controller.findAll().size());
-        assertEquals("new name", controller.findAll().get(0).getName());
-        assertEquals("new login", controller.findAll().get(0).getLogin());
+        assertEquals(1, controller.getAllUsers().size());
+        assertEquals("new name", controller.getAllUsers().get(0).getName());
+        assertEquals("new login", controller.getAllUsers().get(0).getLogin());
     }
     @Test
     public void shouldGiveAnErrorWhenRequestingANonExistentUser() {
