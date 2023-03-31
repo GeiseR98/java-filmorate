@@ -42,4 +42,14 @@ public class UserController {
         log.info("Получен запрос PUT для обновления существующего пользователя.");
         return userService.changeUser(user);
     }
+    @GetMapping("/users/{id}")
+        public User getUserById(@PathVariable("id") Integer id) {
+        log.info("получен запрос пользователя по идентификатору");
+        return userService.getUserById(id);
+    }
+    @DeleteMapping("/users/{id}")
+    public void removeUser(@PathVariable("id") Integer id) {
+        log.info("получен запрос на удаление пользователя.");
+        userService.removeUsers(id);
+    }
 }

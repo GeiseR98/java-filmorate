@@ -70,7 +70,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<Integer> getFriends(Integer id) {
         log.debug("Текущее колличество друзей у пользователя с идентификатором {}: {}", id, friends.get(id).size());
-        return new ArrayList<>(friends.get(id));
+        return friends.get(id).stream()
+                .sorted(Integer::compareTo).collect(Collectors.toList());
     }
-
 }

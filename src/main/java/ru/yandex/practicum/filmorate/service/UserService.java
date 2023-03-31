@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -40,4 +41,25 @@ public class UserService {
             throw new ValidationException("данный пользователь не обнаружен");
         }
     }
+    public User getUserById (Integer id) {
+        if (userStorage.isUserPresent(id)) {
+            return userStorage.getUserById(id);
+        } else {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
+        }
+    }
+    public void removeUsers(Integer id) {
+        if (userStorage.isUserPresent(id)) {
+            userStorage.removeUsers(id);
+        } else {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
+        }
+    }
+//    User getUserById(Integer id);
+//    void addAsFriends(Integer oneId, Integer twoId);
+//    void removeFromFriends(Integer oneId, Integer twoId);
+//    List<Integer> getFriends(Integer id);
+
 }
