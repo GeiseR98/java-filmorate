@@ -9,6 +9,12 @@ public interface UserStorage {
     User createUser(User user);
     User changeUser(User user);
     boolean isUserPresent(Integer id);
+    void removeUsers(Integer id);
+    User getUserById(Integer id);
+    void addAsFriends(Integer oneId, Integer twoId);
+    void removeFromFriends(Integer oneId, Integer twoId);
+    List<Integer> getFriends(Integer id);
+
     /*
     для переноса ("рефакторинга") уже есть
     findAll
