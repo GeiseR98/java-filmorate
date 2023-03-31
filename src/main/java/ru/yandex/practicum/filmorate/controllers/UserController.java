@@ -43,13 +43,24 @@ public class UserController {
         return userService.changeUser(user);
     }
     @GetMapping("/users/{id}")
-        public User getUserById(@PathVariable("id") Integer id) {
+        public User getUserById(@PathVariable Integer id) {
         log.info("получен запрос пользователя по идентификатору");
         return userService.getUserById(id);
     }
     @DeleteMapping("/users/{id}")
-    public void removeUser(@PathVariable("id") Integer id) {
+    public void removeUser(@PathVariable Integer id) {
         log.info("получен запрос на удаление пользователя.");
         userService.removeUsers(id);
     }
+    @PutMapping("/users/{userId}/friends/{friendId}")
+    public void addAsFriends(@PathVariable("userID") Integer oneId, @PathVariable("friendId") Integer twoId) {
+        log.info("Получен запрос на добавление в друзья пользователя {} пользователем {}", oneId, twoId);
+        userService.addAsFriends(oneId, twoId);
+    }
+    @DeleteMapping("users/{userId}/friends/{friendId}")
+    public void removeFromFriends(Integer oneId, Integer twoId) {
+        log.info("Получен запрос на удаление из друзей {} пользователем {}", oneId, twoId);
+        userService.removeFromFriends(oneId, twoId);
+    }
+//    List<Integer> getFriends(Integer id);
 }

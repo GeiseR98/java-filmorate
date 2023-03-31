@@ -57,9 +57,28 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
         }
     }
-//    User getUserById(Integer id);
-//    void addAsFriends(Integer oneId, Integer twoId);
-//    void removeFromFriends(Integer oneId, Integer twoId);
+    public void addAsFriends(Integer oneId, Integer twoId) {
+        if (!userStorage.isUserPresent(oneId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
+        }
+        if (!userStorage.isUserPresent(twoId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
+        }
+        userStorage.addAsFriends(oneId, twoId);
+    }
+    public void removeFromFriends(Integer oneId, Integer twoId) {
+        if (!userStorage.isUserPresent(oneId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
+        }
+        if (!userStorage.isUserPresent(twoId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
+        }
+        userStorage.removeFromFriends(oneId, twoId);
+    }
 //    List<Integer> getFriends(Integer id);
 
 }
