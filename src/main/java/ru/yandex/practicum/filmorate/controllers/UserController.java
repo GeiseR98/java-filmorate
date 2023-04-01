@@ -48,23 +48,23 @@ public class UserController {
         userService.removeUsers(id);
     }
     @PutMapping("/users/{userId}/friends/{friendId}")
-    public void addAsFriends(@PathVariable("userID") Integer oneId, @PathVariable("friendId") Integer twoId) {
+    public void addAsFriends(@PathVariable("userId") Integer oneId, @PathVariable("friendId") Integer twoId) {
         log.info("Получен запрос на добавление в друзья пользователя {} пользователем {}", oneId, twoId);
         userService.addAsFriends(oneId, twoId);
     }
     @DeleteMapping("users/{userId}/friends/{friendId}")
-    public void removeFromFriends(Integer oneId, Integer twoId) {
+    public void removeFromFriends(@PathVariable("userId") Integer oneId, @PathVariable("friendId") Integer twoId) {
         log.info("Получен запрос на удаление из друзей {} пользователем {}", oneId, twoId);
         userService.removeFromFriends(oneId, twoId);
     }
     @GetMapping("/users/{userId}/friends")
-    public List<Integer> getFriends(@PathVariable Integer id) {
+    public List<Integer> getFriends(@PathVariable("userId") Integer id) {
         log.info("получен запрос списка друзей пользователя с идентификатором {}", id);
         return userService.getFriends(id);
     }
-    @GetMapping("/users/{id}/friends/common/{otherId}")
+    @GetMapping("/users/{userId}/friends/common/{otherId}")
     public List<Integer> getListOfMutualFriends(
-            @PathVariable("userID") Integer oneId,
+            @PathVariable("userId") Integer oneId,
             @PathVariable("otherId") Integer twoId) {
         log.info("Получен запрос списка общих друзей");
         return userService.getListOfMutualFriends(oneId, twoId);
