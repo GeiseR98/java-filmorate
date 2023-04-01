@@ -6,6 +6,8 @@ import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,12 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class FilmControllerTest {
     private FilmController controller;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-
     @BeforeEach
     public void beforeEach() {
-        controller = new FilmController();
-        controller.addFilm(Film.builder()
+        controller = new FilmController(new FilmService(new InMemoryFilmStorage()));
+        controller.add(Film.builder()
                 .name("Don't Be a Menace to South Central While Drinking Your Juice in the Hood")
                 .description("описание слишком долгое, что бы его писать сюда")
                 .releaseDate(LocalDate.parse("1996-01-12", formatter))

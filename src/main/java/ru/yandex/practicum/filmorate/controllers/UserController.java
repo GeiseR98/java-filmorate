@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        log.debug("запрос всех пользователей");
+        log.debug("Получен запрос всех пользователей");
         return userService.getAllUsers();
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     }
     @GetMapping("/users/{id}")
         public User getUserById(@PathVariable Integer id) {
-        log.info("получен запрос пользователя по идентификатору");
+        log.info("Получен запрос пользователя по идентификатору");
         return userService.getUserById(id);
     }
     @DeleteMapping("/users/{id}")

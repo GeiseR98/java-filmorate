@@ -15,18 +15,4 @@ public interface UserStorage {
     void addAsFriends(Integer oneId, Integer twoId);
     void removeFromFriends(Integer oneId, Integer twoId);
     Set<Integer> getFriends(Integer id);
-
-    /*
-    для переноса ("рефакторинга") уже есть
-    findAll
-    addUser
-    changeUser
-
-    новое
-    removeUser
-    addFriend
-    RemoveFriends
-    getUserById
-    getFriends
-     */
 }

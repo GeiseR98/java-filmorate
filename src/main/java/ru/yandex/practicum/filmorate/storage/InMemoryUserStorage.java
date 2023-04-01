@@ -3,12 +3,10 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -23,7 +21,7 @@ public class InMemoryUserStorage implements UserStorage {
         return new ArrayList<>(users.values());
     }
     @Override
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(User user) {
         user.setId(++id);
         users.put(user.getId(), user);
         friends.put(user.getId(), new HashSet<>()); // вынести в отдельный метод
@@ -31,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
     @Override
-    public User changeUser(@Valid @RequestBody User user) {
+    public User changeUser(User user) {
         users.put(user.getId(), user);
         log.debug("Данные пользователя под номером: " + user.getId() + " обновлены");
         return user;
@@ -44,8 +42,12 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void removeUsers(Integer id) {
         log.debug("Пользователь с идентификатором {} удалён.", id);
+        if (!friends.get(id).isEmpty()) {
+            for (Integer friendId : friends.get(id)) {
+                friends.get(friendId).remove(id);
+            }
+        }
         users.remove(id);
-        // добавить логику по удалению из друзей в сервис
     }
 
     @Override
