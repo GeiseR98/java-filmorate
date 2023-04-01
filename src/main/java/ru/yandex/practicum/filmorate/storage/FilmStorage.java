@@ -10,10 +10,11 @@ public interface FilmStorage {
     Film addFilm(Film film);
     Film changeFilm(Film film);
     void removeFilmById(Integer id);
-    void addLike();
-    void removeLike();
+    void addLike(Integer userId, Integer filmId);
+    void removeLike(Integer userId, Integer filmId);
     List<Film> getPopularFilms();
     Film getFilmById(Integer id);
+    boolean isFilmPresent(Integer id);
     /*
     для переноса ("рефакторинга") уже есть
     findAll

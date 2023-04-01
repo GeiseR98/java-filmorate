@@ -36,17 +36,14 @@ public class FilmController {
         return filmService.addFilm(film);
     }
 
-//    @PutMapping(value = "/films")
-//    public Film changeFilm(@Valid @RequestBody Film film) {
-//        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-//            throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
-//        }
-//        if (films.containsKey(film.getId())) {
-//            films.put(film.getId(), film);
-//            log.debug("Фильм под номером: " + film.getId() + " обновлён");
-//            return film;
-//        } else {
-//            throw new ValidationException("Фильм под данным номером не найден");
-//        }
-//    }
+    @PutMapping(value = "/films")
+    public Film changeFilm(@Valid @RequestBody Film film) {
+        log.debug("Получен запрос на добавление фильма {}.", film.getName());
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            log.debug("Не прошла валидация по дате релиза");
+            throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
+        }
+        return filmService.changeFilm(film);
+    }
+
 }

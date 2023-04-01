@@ -34,20 +34,28 @@ public class InMemoryFilmStorage implements FilmStorage{
         log.debug("Данные фильма под номером {} обновлены.", film.getId());
         return film;
     }
+    @Override
+    public boolean isFilmPresent(Integer id) {
+        return films.containsKey(id);
+    }
 
     @Override
     public void removeFilmById(Integer id) {
-
+        films.remove(id);
+        likes.remove(id);
+        log.debug("Фильм с номером {} удалён.", id);
     }
 
     @Override
-    public void addLike() {
-
+    public void addLike(Integer userId, Integer filmId) {
+        log.debug("Пользователь {} поставил лайк фильму {}", userId, filmId);
+        likes.get(filmId).add(userId);
     }
 
     @Override
-    public void removeLike() {
-
+    public void removeLike(Integer userId, Integer filmId) {
+        log.debug("Пользователю {} больше не нравится фильм {}", userId, filmId);
+        likes.get(filmId).remove(userId);
     }
 
     @Override
@@ -57,6 +65,7 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Override
     public Film getFilmById(Integer id) {
-        return null;
+        log.debug("Запрос фильма под номером {}", id);
+        return films.get(id);
     }
 }

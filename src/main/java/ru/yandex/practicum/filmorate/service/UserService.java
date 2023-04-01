@@ -39,7 +39,7 @@ public class UserService {
             return userStorage.changeUser(user);
         } else {
             log.debug("данный пользователь не обнаружен");
-            throw new ValidationException("данный пользователь не обнаружен");
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", user.getId()));
         }
     }
     public User getUserById (Integer id) {

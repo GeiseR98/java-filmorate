@@ -30,10 +30,18 @@ public class FilmService {
     }
     public Film addFilm(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.debug("не прошла валидация по дате релиза");
+            log.debug("Не прошла валидация по дате релиза");
             throw new ValidationException("дата релиза — не раньше 28 декабря 1895 года");
         }
         return filmStorage.addFilm(film);
+    }
+    public Film changeFilm(Film film) {
+        if (filmStorage.isFilmPresent(film.getId())) {
+            return filmStorage.changeFilm(film);
+        } else {
+            log.debug(String.format("Фильм с идентификатором {} не найдено", film.getId()));
+            throw new UserNotFoundException(String.format("Фильм с идентификатором {} не найдено", film.getId()));
+        }
     }
 
 //    public User changeUser(User user) {

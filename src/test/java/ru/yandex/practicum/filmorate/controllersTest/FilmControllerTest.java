@@ -21,7 +21,7 @@ class FilmControllerTest {
     @BeforeEach
     public void beforeEach() {
         controller = new FilmController(new FilmService(new InMemoryFilmStorage()));
-        controller.add(Film.builder()
+        controller.addFilm(Film.builder()
                 .name("Don't Be a Menace to South Central While Drinking Your Juice in the Hood")
                 .description("описание слишком долгое, что бы его писать сюда")
                 .releaseDate(LocalDate.parse("1996-01-12", formatter))
