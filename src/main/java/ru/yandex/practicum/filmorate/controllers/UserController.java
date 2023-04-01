@@ -3,16 +3,11 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -62,5 +57,16 @@ public class UserController {
         log.info("Получен запрос на удаление из друзей {} пользователем {}", oneId, twoId);
         userService.removeFromFriends(oneId, twoId);
     }
-//    List<Integer> getFriends(Integer id);
+    @GetMapping("/users/{userId}/friends")
+    public List<Integer> getFriends(@PathVariable Integer id) {
+        log.info("получен запрос списка друзей пользователя с идентификатором {}", id);
+        return userService.getFriends(id);
+    }
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public List<Integer> getListOfMutualFriends(
+            @PathVariable("userID") Integer oneId,
+            @PathVariable("otherId") Integer twoId) {
+        log.info("Получен запрос списка общих друзей");
+        return userService.getListOfMutualFriends(oneId, twoId);
+    }
 }

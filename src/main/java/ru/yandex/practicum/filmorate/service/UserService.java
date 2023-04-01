@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -79,6 +80,25 @@ public class UserService {
         }
         userStorage.removeFromFriends(oneId, twoId);
     }
-//    List<Integer> getFriends(Integer id);
-
+    public List<Integer> getFriends(Integer id){
+        if (!userStorage.isUserPresent(id)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
+        }
+        return userStorage.getFriends(id).stream()
+                .sorted(Integer::compareTo).collect(Collectors.toList());
+    }
+    public List<Integer> getListOfMutualFriends(Integer oneId,Integer twoId) {
+        if (!userStorage.isUserPresent(oneId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
+        }
+        if (!userStorage.isUserPresent(twoId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
+        }
+        return userStorage.getFriends(oneId).stream()
+                .filter(userStorage.getFriends(twoId)::contains)
+                .collect(Collectors.toList());
+    }
 }
