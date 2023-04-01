@@ -80,15 +80,16 @@ public class UserService {
         }
         userStorage.removeFromFriends(oneId, twoId);
     }
-    public List<Integer> getFriends(Integer id){
+    public List<User> getFriends(Integer id){
         if (!userStorage.isUserPresent(id)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", id));
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
         }
         return userStorage.getFriends(id).stream()
-                .sorted(Integer::compareTo).collect(Collectors.toList());
+                .map(userStorage::getUserById)
+                .collect(Collectors.toList());
     }
-    public List<Integer> getListOfMutualFriends(Integer oneId,Integer twoId) {
+    public List<User> getListOfMutualFriends(Integer oneId,Integer twoId) {
         if (!userStorage.isUserPresent(oneId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
@@ -99,6 +100,7 @@ public class UserService {
         }
         return userStorage.getFriends(oneId).stream()
                 .filter(userStorage.getFriends(twoId)::contains)
+                .map(userStorage::getUserById)
                 .collect(Collectors.toList());
     }
 }

@@ -58,12 +58,12 @@ public class UserController {
         userService.removeFromFriends(oneId, twoId);
     }
     @GetMapping("/users/{userId}/friends")
-    public List<Integer> getFriends(@PathVariable("userId") Integer id) {
+    public List<User> getFriends(@PathVariable("userId") Integer id) {
         log.info("получен запрос списка друзей пользователя с идентификатором {}", id);
         return userService.getFriends(id);
     }
     @GetMapping("/users/{userId}/friends/common/{otherId}")
-    public List<Integer> getListOfMutualFriends(
+    public List<User> getListOfMutualFriends(
             @PathVariable("userId") Integer oneId,
             @PathVariable("otherId") Integer twoId) {
         log.info("Получен запрос списка общих друзей");
