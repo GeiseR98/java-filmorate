@@ -10,9 +10,9 @@ public interface FilmStorage {
     Film addFilm(Film film);
     Film changeFilm(Film film);
     void removeFilmById(Integer id);
-    void addLike(Integer userId, Integer filmId);
-    void removeLike(Integer userId, Integer filmId);
-    List<Film> getPopularFilms();
+    void addLike(Integer filmId, Integer userId);
+    void removeLike(Integer filmId, Integer userId);
+    List<Film> getPopularFilms(Integer count);
     Film getFilmById(Integer id);
     boolean isFilmPresent(Integer id);
     /*

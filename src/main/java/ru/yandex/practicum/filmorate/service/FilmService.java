@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -14,6 +15,8 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,81 +42,52 @@ public class FilmService {
         if (filmStorage.isFilmPresent(film.getId())) {
             return filmStorage.changeFilm(film);
         } else {
-            log.debug(String.format("Фильм с идентификатором {} не найдено", film.getId()));
-            throw new UserNotFoundException(String.format("Фильм с идентификатором {} не найдено", film.getId()));
+            log.debug(String.format("Фильм с идентификатором {} не найден", film.getId()));
+            throw new FilmNotFoundException(String.format("Фильм с идентификатором {} не найден", film.getId()));
         }
     }
 
-//    public User changeUser(User user) {
-//        if (userStorage.isUserPresent(user.getId())) {
-//            if (user.getName() == null || user.getName().isBlank()) {
-//                user.setName(user.getLogin());
-//            }
-//            return userStorage.changeUser(user);
-//        } else {
-//            log.debug("данный пользователь не обнаружен");
-//            throw new ValidationException("данный пользователь не обнаружен");
-//        }
-//    }
-//    public User getUserById (Integer id) {
-//        if (userStorage.isUserPresent(id)) {
-//            return userStorage.getUserById(id);
-//        } else {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
-//        }
-//    }
-//    public void removeUsers(Integer id) {
-//        if (userStorage.isUserPresent(id)) {
-//            userStorage.removeUsers(id);
-//        } else {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
-//        }
-//    }
-//    public void addAsFriends(Integer oneId, Integer twoId) {
+    public Film getFilmById (Integer id) {
+        if (filmStorage.isFilmPresent(id)) {
+            return filmStorage.getFilmById(id);
+        } else {
+            log.debug("Фильм с номером {} не найден", id);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", id));
+        }
+    }
+    public void removeFilms(Integer id) {
+        if (filmStorage.isFilmPresent(id)) {
+            filmStorage.removeFilmById(id);
+        } else {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
+        }
+    }
+    public void addLike(Integer userId, Integer filmId) {
 //        if (!userStorage.isUserPresent(oneId)) {
 //            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
 //            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
 //        }
-//        if (!userStorage.isUserPresent(twoId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
-//        }
-//        userStorage.addAsFriends(oneId, twoId);
-//    }
-//    public void removeFromFriends(Integer oneId, Integer twoId) {
+        if (!filmStorage.isFilmPresent(filmId)) {
+            log.debug("Пользователю {} понравился фильм {}.", userId, filmId);
+            throw new FilmNotFoundException(String.format("Пользователь с идентификатором %s не найден", filmId));
+        }
+        filmStorage.addLike(userId, filmId);
+    }
+
+    public void removeLike(Integer filmId, Integer userId) {
 //        if (!userStorage.isUserPresent(oneId)) {
 //            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
 //            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
 //        }
-//        if (!userStorage.isUserPresent(twoId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
-//        }
-//        userStorage.removeFromFriends(oneId, twoId);
-//    }
-//    public List<User> getFriends(Integer id){
-//        if (!userStorage.isUserPresent(id)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
-//        }
-//        return userStorage.getFriends(id).stream()
-//                .map(userStorage::getUserById)
-//                .collect(Collectors.toList());
-//    }
-//    public List<User> getListOfMutualFriends(Integer oneId,Integer twoId) {
-//        if (!userStorage.isUserPresent(oneId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
-//        }
-//        if (!userStorage.isUserPresent(twoId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", twoId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", twoId));
-//        }
-//        return userStorage.getFriends(oneId).stream()
-//                .filter(userStorage.getFriends(twoId)::contains)
-//                .map(userStorage::getUserById)
-//                .collect(Collectors.toList());
-//    }
+        if (!filmStorage.isFilmPresent(filmId)) {
+            log.debug("Пользователю {} понравился фильм {}.", userId, filmId);
+            throw new FilmNotFoundException(String.format("Пользователь с идентификатором %s не найден", filmId));
+        }
+        filmStorage.removeLike(filmId, userId);
+    }
+
+    public List<Film> getPopularFilms(Integer count) {
+        return filmStorage.getPopularFilms(Objects.requireNonNullElse(count, 10));
+    }
 }

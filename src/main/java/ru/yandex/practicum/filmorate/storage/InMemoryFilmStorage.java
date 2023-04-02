@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -47,20 +48,28 @@ public class InMemoryFilmStorage implements FilmStorage{
     }
 
     @Override
-    public void addLike(Integer userId, Integer filmId) {
+    public void addLike(Integer filmId, Integer userId) {
         log.debug("Пользователь {} поставил лайк фильму {}", userId, filmId);
         likes.get(filmId).add(userId);
     }
 
     @Override
-    public void removeLike(Integer userId, Integer filmId) {
+    public void removeLike(Integer filmId, Integer userId) {
         log.debug("Пользователю {} больше не нравится фильм {}", userId, filmId);
         likes.get(filmId).remove(userId);
     }
 
     @Override
-    public List<Film> getPopularFilms() {
-        return null;
+    public List<Film> getPopularFilms(Integer count) {
+        log.debug("Запрос {} самых популярных фильмов", count);
+        return  likes.entrySet().stream()
+                .sorted((o1, o2) -> Integer.compare(o2.getValue().size(), o1.getValue().size()))
+                .map(Map.Entry::getKey)
+                .limit(Objects.requireNonNullElse(count, 10))
+                .collect(Collectors.toList()).stream()
+                .mapToInt(number -> number)
+                .mapToObj(films::get)
+                .collect(Collectors.toList());
     }
 
     @Override
