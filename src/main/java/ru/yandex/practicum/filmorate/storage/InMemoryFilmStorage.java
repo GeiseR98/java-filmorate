@@ -35,6 +35,7 @@ public class InMemoryFilmStorage implements FilmStorage{
         log.debug("Данные фильма под номером {} обновлены.", film.getId());
         return film;
     }
+
     @Override
     public boolean isFilmPresent(Integer id) {
         return films.containsKey(id);

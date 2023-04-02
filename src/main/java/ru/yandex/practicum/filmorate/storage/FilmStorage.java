@@ -15,17 +15,4 @@ public interface FilmStorage {
     List<Film> getPopularFilms(Integer count);
     Film getFilmById(Integer id);
     boolean isFilmPresent(Integer id);
-    /*
-    для переноса ("рефакторинга") уже есть
-    findAll
-    addFilm
-    changeFilm
-/*
-    новое
-    removeFilm
-    addLike
-    removeLike
-    getPopularByCount
-    getFilmById
-     */
 }

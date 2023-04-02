@@ -25,12 +25,14 @@ public class UserService {
     public List<User> getAllUsers() {
         return userStorage.getAllUsers();
     }
+
     public User createUser(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         return userStorage.createUser(user);
     }
+
     public User changeUser(User user) {
         if (userStorage.isUserPresent(user.getId())) {
             if (user.getName() == null || user.getName().isBlank()) {
@@ -42,6 +44,7 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", user.getId()));
         }
     }
+
     public User getUserById (Integer id) {
         if (userStorage.isUserPresent(id)) {
             return userStorage.getUserById(id);
@@ -50,6 +53,7 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
         }
     }
+
     public void removeUsers(Integer id) {
         if (userStorage.isUserPresent(id)) {
             userStorage.removeUsers(id);
@@ -58,6 +62,7 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
         }
     }
+
     public void addAsFriends(Integer oneId, Integer twoId) {
         if (!userStorage.isUserPresent(oneId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
@@ -69,6 +74,7 @@ public class UserService {
         }
         userStorage.addAsFriends(oneId, twoId);
     }
+
     public void removeFromFriends(Integer oneId, Integer twoId) {
         if (!userStorage.isUserPresent(oneId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
@@ -80,6 +86,7 @@ public class UserService {
         }
         userStorage.removeFromFriends(oneId, twoId);
     }
+
     public List<User> getFriends(Integer id){
         if (!userStorage.isUserPresent(id)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", id));
@@ -89,6 +96,7 @@ public class UserService {
                 .map(userStorage::getUserById)
                 .collect(Collectors.toList());
     }
+
     public List<User> getListOfMutualFriends(Integer oneId,Integer twoId) {
         if (!userStorage.isUserPresent(oneId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));

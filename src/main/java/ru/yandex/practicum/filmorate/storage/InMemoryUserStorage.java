@@ -20,6 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
         log.debug("Текущее количество пользователей: {}", users.values().size());
         return new ArrayList<>(users.values());
     }
+
     @Override
     public User createUser(User user) {
         user.setId(++id);
@@ -28,12 +29,14 @@ public class InMemoryUserStorage implements UserStorage {
         log.debug("Пользователь добавлен под номером: " + user.getId());
         return user;
     }
+
     @Override
     public User changeUser(User user) {
         users.put(user.getId(), user);
         log.debug("Данные пользователя под номером: " + user.getId() + " обновлены");
         return user;
     }
+
     @Override
     public boolean isUserPresent(Integer id) {
         return users.containsKey(id);

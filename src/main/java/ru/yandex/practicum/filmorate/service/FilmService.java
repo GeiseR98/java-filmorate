@@ -28,6 +28,7 @@ public class FilmService {
     public List<Film> getAllFilms() {
         return filmStorage.getAllFilms();
     }
+
     public Film addFilm(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             log.debug("Не прошла валидация по дате релиза");
@@ -35,6 +36,7 @@ public class FilmService {
         }
         return filmStorage.addFilm(film);
     }
+
     public Film changeFilm(Film film) {
         if (filmStorage.isFilmPresent(film.getId())) {
             return filmStorage.changeFilm(film);
@@ -52,6 +54,7 @@ public class FilmService {
             throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
     }
+
     public void removeFilms(Integer filmId) {
         if (filmStorage.isFilmPresent(filmId)) {
             filmStorage.removeFilmById(filmId);
@@ -60,6 +63,7 @@ public class FilmService {
             throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
     }
+
     public void addLike(Integer filmId, Integer userId) {
         if (!userStorage.isUserPresent(userId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", userId));

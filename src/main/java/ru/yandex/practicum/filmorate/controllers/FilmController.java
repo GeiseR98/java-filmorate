@@ -42,11 +42,13 @@ public class FilmController {
         }
         return filmService.changeFilm(film);
     }
+
     @GetMapping("/films/{filmId}")
     public Film getFilmById(@PathVariable int filmId) {
         log.debug("Получен запрос фильма по номеру");
         return filmService.getFilmById(filmId);
     }
+
     @DeleteMapping("/films/{filmId}")
     public void removeFilmById(@PathVariable int filmId) {
         log.debug("Получен запрос на удаление фильма номер {}", filmId);
@@ -74,5 +76,4 @@ public class FilmController {
         log.debug("Получен запрос топ-{} популярных фильмов", count);
         return filmService.getPopularFilms(count);
     }
-
 }
