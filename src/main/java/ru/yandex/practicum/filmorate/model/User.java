@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class User{
+public class User {
     private int id;
     @Email(message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
@@ -21,6 +21,4 @@ public class User{
     @PastOrPresent(message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
-
-
 }
