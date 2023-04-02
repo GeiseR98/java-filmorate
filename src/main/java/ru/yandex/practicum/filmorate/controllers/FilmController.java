@@ -9,10 +9,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -50,6 +47,11 @@ public class FilmController {
         log.debug("Получен запрос фильма по номеру");
         return filmService.getFilmById(filmId);
     }
+    @DeleteMapping("/films/{filmId}")
+    public void removeFilmById(@PathVariable int filmId) {
+        log.debug("Получен запрос на удаление фильма номер {}", filmId);
+        filmService.removeFilms(filmId);
+    }
 
     @PutMapping("/films/{filmId}/like/{userId}")
     public void addLike(@PathVariable int filmId, @PathVariable int userId) {
@@ -65,6 +67,10 @@ public class FilmController {
 
     @GetMapping("/films/popular")
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
+        if (count <= 0) {
+            log.debug("Колличество фильмов должно быть положительным");
+            throw new ValidationException("Колличество фильмов должно быть положительным");
+        }
         log.debug("Получен запрос топ-{} популярных фильмов", count);
         return filmService.getPopularFilms(count);
     }

@@ -3,21 +3,14 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,25 +35,25 @@ public class FilmService {
         if (filmStorage.isFilmPresent(film.getId())) {
             return filmStorage.changeFilm(film);
         } else {
-            log.debug(String.format("Фильм с идентификатором {} не найден", film.getId()));
-            throw new FilmNotFoundException(String.format("Фильм с идентификатором {} не найден", film.getId()));
+            log.debug("Фильм с номером {} не найден", film.getId());
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", film.getId()));
         }
     }
 
-    public Film getFilmById (Integer id) {
-        if (filmStorage.isFilmPresent(id)) {
-            return filmStorage.getFilmById(id);
+    public Film getFilmById (Integer filmId) {
+        if (filmStorage.isFilmPresent(filmId)) {
+            return filmStorage.getFilmById(filmId);
         } else {
-            log.debug("Фильм с номером {} не найден", id);
-            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", id));
+            log.debug("Фильм с номером {} не найден", filmId);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
     }
-    public void removeFilms(Integer id) {
-        if (filmStorage.isFilmPresent(id)) {
-            filmStorage.removeFilmById(id);
+    public void removeFilms(Integer filmId) {
+        if (filmStorage.isFilmPresent(filmId)) {
+            filmStorage.removeFilmById(filmId);
         } else {
-            log.debug(String.format("Пользователь с идентификатором %s не найден", id));
-            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
+            log.debug("Фильм с номером {} не найден", filmId);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
     }
     public void addLike(Integer userId, Integer filmId) {
@@ -69,8 +62,8 @@ public class FilmService {
 //            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
 //        }
         if (!filmStorage.isFilmPresent(filmId)) {
-            log.debug("Пользователю {} понравился фильм {}.", userId, filmId);
-            throw new FilmNotFoundException(String.format("Пользователь с идентификатором %s не найден", filmId));
+            log.debug("Фильм с номером {} не найден", filmId);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
         filmStorage.addLike(userId, filmId);
     }
@@ -81,8 +74,8 @@ public class FilmService {
 //            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
 //        }
         if (!filmStorage.isFilmPresent(filmId)) {
-            log.debug("Пользователю {} понравился фильм {}.", userId, filmId);
-            throw new FilmNotFoundException(String.format("Пользователь с идентификатором %s не найден", filmId));
+            log.debug("Фильм с номером {} не найден", filmId);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
         filmStorage.removeLike(filmId, userId);
     }
