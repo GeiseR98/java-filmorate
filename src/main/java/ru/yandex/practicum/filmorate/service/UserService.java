@@ -84,7 +84,7 @@ public class UserService {
         userStorage.removeFromFriends(oneId, twoId);
     }
 
-    public List<User> getFriends(Integer id){
+    public List<User> getFriends(Integer id) {
         if (!userStorage.isUserPresent(id)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", id));
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", id));
