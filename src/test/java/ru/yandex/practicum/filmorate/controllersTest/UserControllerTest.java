@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.controllersTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.UserController;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
@@ -60,8 +62,8 @@ class UserControllerTest {
 
     @Test
     public void shouldGiveAnErrorWhenRequestingANonExistentUser() {
-        ValidationException ex = assertThrows(
-                ValidationException.class,
+        UserNotFoundException ex = assertThrows(
+                UserNotFoundException.class,
                 () -> controller.changeUser(User.builder()
                         .id(5)
                         .email("adeptYaPr@new.org")
@@ -70,6 +72,6 @@ class UserControllerTest {
                         .birthday(LocalDate.of(1990, 6, 24))
                         .build())
         );
-        assertEquals("данный пользователь не обнаружен", ex.getMessage());
+        assertEquals((String.format("Пользователь с идентификатором %s не найден", 5)), ex.getMessage());
     }
 }

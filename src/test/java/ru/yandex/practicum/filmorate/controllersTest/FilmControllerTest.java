@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controllersTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
+import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -62,8 +63,8 @@ class FilmControllerTest {
 
     @Test
     public void shouldGiveAnErrorWhenRequestingANonExistentMovie() {
-        ValidationException ex = assertThrows(
-                ValidationException.class,
+        FilmNotFoundException ex = assertThrows(
+                FilmNotFoundException.class,
                 () -> controller.changeFilm(Film.builder()
                         .id(3)
                         .name("Don't Be a Menace to South Central While Drinking Your Juice in the Hood")
@@ -72,6 +73,6 @@ class FilmControllerTest {
                         .duration((long) 89)
                         .build())
         );
-        assertEquals("Фильм под данным номером не найден", ex.getMessage());
+        assertEquals(String.format("Фильм с номером %s не найден", 3), ex.getMessage());
     }
 }
