@@ -20,6 +20,7 @@ public class FilmService {
     private final FilmStorage filmStorage;
     @Autowired
     private UserStorage userStorage;
+
     @Autowired
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
@@ -46,7 +47,7 @@ public class FilmService {
         }
     }
 
-    public Film getFilmById (Integer filmId) {
+    public Film getFilmById(Integer filmId) {
         if (filmStorage.isFilmPresent(filmId)) {
             return filmStorage.getFilmById(filmId);
         } else {

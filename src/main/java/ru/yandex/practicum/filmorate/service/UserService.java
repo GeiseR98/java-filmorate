@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     private final UserStorage userStorage;
+
     @Autowired
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
@@ -42,7 +43,7 @@ public class UserService {
         }
     }
 
-    public User getUserById (Integer id) {
+    public User getUserById(Integer id) {
         if (userStorage.isUserPresent(id)) {
             return userStorage.getUserById(id);
         } else {
@@ -94,7 +95,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<User> getListOfMutualFriends(Integer oneId,Integer twoId) {
+    public List<User> getListOfMutualFriends(Integer oneId, Integer twoId) {
         if (!userStorage.isUserPresent(oneId)) {
             log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
             throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));

@@ -71,7 +71,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public  Set<Integer> getFriends(Integer id) {
+    public Set<Integer> getFriends(Integer id) {
         log.debug("Текущее колличество друзей у пользователя с идентификатором {}: {}", id, friends.get(id).size());
         return friends.get(id);
     }
