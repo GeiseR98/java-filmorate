@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Objects;
 @Service
 public class FilmService {
     private final FilmStorage filmStorage;
+    @Autowired
+    private UserStorage userStorage;
     @Autowired
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
@@ -56,23 +60,23 @@ public class FilmService {
             throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
     }
-    public void addLike(Integer userId, Integer filmId) {
-//        if (!userStorage.isUserPresent(oneId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
-//        }
+    public void addLike(Integer filmId, Integer userId) {
+        if (!userStorage.isUserPresent(userId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", userId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", userId));
+        }
         if (!filmStorage.isFilmPresent(filmId)) {
             log.debug("Фильм с номером {} не найден", filmId);
             throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
         }
-        filmStorage.addLike(userId, filmId);
+        filmStorage.addLike(filmId, userId);
     }
 
     public void removeLike(Integer filmId, Integer userId) {
-//        if (!userStorage.isUserPresent(oneId)) {
-//            log.debug(String.format("Пользователь с идентификатором %s не найден", oneId));
-//            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", oneId));
-//        }
+        if (!userStorage.isUserPresent(userId)) {
+            log.debug(String.format("Пользователь с идентификатором %s не найден", userId));
+            throw new UserNotFoundException(String.format("Пользователь с идентификатором %s не найден", userId));
+        }
         if (!filmStorage.isFilmPresent(filmId)) {
             log.debug("Фильм с номером {} не найден", filmId);
             throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", filmId));
