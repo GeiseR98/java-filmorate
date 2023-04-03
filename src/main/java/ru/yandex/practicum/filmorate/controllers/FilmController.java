@@ -2,17 +2,18 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
 @RestController
+@Validated
 public class FilmController {
     private final FilmService filmService;
 
@@ -64,11 +65,11 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
-        if (count <= 0) {
-            log.debug("Колличество фильмов должно быть положительным");
-            throw new ValidationException("Колличество фильмов должно быть положительным");
-        }
+    public List<Film> getPopularFilms(
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1, message = "В запросе задано отрицательное или равное нолю колличество фильмов")
+
+            Integer count) {
         log.debug("Получен запрос топ-{} популярных фильмов", count);
         return filmService.getPopularFilms(count);
     }
