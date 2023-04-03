@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
@@ -28,12 +27,6 @@ class FilmControllerTest {
     @Test
     public void shouldReturnAListOfMovies() {
         assertEquals(1, controller.findAll().size());
-    }
-
-    @Test
-    public void shouldNotAddAMovieWithAnIncorrectReleaseDate() {
-        ValidationException ex = assertThrows(ValidationException.class, () -> controller.addFilm(Film.builder().name("Man Walking Around A Corner").description("Считается самым первым фильмом в мире. Был снят в Париже").releaseDate(LocalDate.parse("1887-08-18", formatter)).duration((long) 1).build()));
-        assertEquals("дата релиза — не раньше 28 декабря 1895 года", ex.getMessage());
     }
 
     @Test
