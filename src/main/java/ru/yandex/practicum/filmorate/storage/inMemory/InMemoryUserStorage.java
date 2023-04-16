@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -77,8 +78,8 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Set<Integer> getFriends(Integer id) {
+    public List<Integer> getFriends(Integer id) {
         log.debug("Текущее колличество друзей у пользователя с идентификатором {}: {}", id, friends.get(id).size());
-        return friends.get(id);
+        return new ArrayList<>(friends.get(id));
     }
 }
