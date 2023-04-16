@@ -21,5 +21,5 @@ public interface UserStorage {
 
     void removeFromFriends(Integer oneId, Integer twoId);
 
-    List<Integer> getFriends(Integer id);
+    List<User> getFriends(Integer id);
 }

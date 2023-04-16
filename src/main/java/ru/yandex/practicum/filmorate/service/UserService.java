@@ -62,9 +62,7 @@ public class UserService {
 
     public List<User> getFriends(Integer id) {
         userStorage.isUserPresent(id);
-        return userStorage.getFriends(id).stream()
-                .map(userStorage::getUserById)
-                .collect(Collectors.toList());
+        return userStorage.getFriends(id);
     }
 
     public List<User> getListOfMutualFriends(Integer oneId, Integer twoId) {

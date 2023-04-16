@@ -78,8 +78,11 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public List<Integer> getFriends(Integer id) {
+    public List<User> getFriends(Integer id) {
         log.debug("Текущее колличество друзей у пользователя с идентификатором {}: {}", id, friends.get(id).size());
-        return new ArrayList<>(friends.get(id));
+        isUserPresent(id);
+        return friends.get(id).stream()
+                .map(users::get)
+                .collect(Collectors.toList());
     }
 }
