@@ -27,6 +27,7 @@ public class UserDbStorage implements UserStorage {
         this.jdbcTemplate = jdbcTemplate;
         this.userMapper = userMapper;
     }
+
     @Override
     public List<User> getAllUsers() {
         String sqlQuery = "SELECT * FROM users";
@@ -99,11 +100,15 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getListOfMutualFriends(Integer oneId, Integer twoId) {
-        String sqlQuery = "SELECT * FROM users " +
-                "JOIN (SELECT friend_two_id FROM friends WHERE friend_one_id = ?) AS fr " +
-                "ON users.friend_one_id = fr.friend_two_id " +
-                "JOIN (SELECT friend_two_id FROM friends WHERE friend_one_id = ?) AS nfr " +
-                "ON user.friend_one_id = nfr.friend_two_id";
+        String sqlQuery = "SELECT *" +
+                "FROM users " +
+                "WHERE user_id IN (SELECT friend_two_id " +
+                "FROM friends AS f1 " +
+                "WHERE friend_one_id = ? " +
+                "AND friend_two_id IN ( " +
+                "SELECT friend_two_id " +
+                "FROM friends AS f2 " +
+                "WHERE friend_one_id = ?))";
         return jdbcTemplate.query(sqlQuery, userMapper, oneId, twoId);
     }
 
