@@ -6,7 +6,7 @@ MERGE INTO genre (genre_id, genre_name)
            (5, 'Документальный'),
            (6, 'Боевик');
 
-MERGE INTO mpa (mpa_id, mpa_name)
+MERGE INTO MPA (mpa_id, mpa_name)
     VALUES (1, 'G'),
            (2, 'PG'),
            (3, 'PG-13'),
