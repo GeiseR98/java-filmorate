@@ -6,9 +6,13 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.model.validator.ReleaseDateConstraint;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Data
 @Builder
@@ -22,5 +26,14 @@ public class Film {
     @ReleaseDateConstraint
     private final LocalDate releaseDate;
     @Positive(message = "продолжительность фильма должна быть положительной")
-    private final Long duration;
+    private final int duration;
+    @NotNull
+    private int rate;
+    @NotNull
+    private Mpa mpa;
+    private final Set<Genre> genres = new TreeSet<>(Comparator.comparingInt(Genre::getGenreId));
+
+    public void addFilmGenre(Genre genre) {
+        genres.add(genre);
+    }
 }
