@@ -85,4 +85,14 @@ public class InMemoryUserStorage implements UserStorage {
                 .map(users::get)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<User> getListOfMutualFriends(Integer oneId, Integer twoId) {
+        isUserPresent(oneId);
+        isUserPresent(twoId);
+        return friends.get(oneId).stream()
+                .filter(friends.get(twoId)::contains)
+                .map(users::get)
+                .collect(Collectors.toList());
+    }
 }

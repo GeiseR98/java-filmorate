@@ -89,7 +89,6 @@ public class UserDbStorage implements UserStorage {
     public void removeFromFriends(Integer oneId, Integer twoId) {
 
     }
-
     @Override
     public List<User> getFriends(Integer id) {
         String sqlQuery = "SELECT * FROM users AS u " +
