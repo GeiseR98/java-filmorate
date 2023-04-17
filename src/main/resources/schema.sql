@@ -43,11 +43,3 @@ CREATE TABLE IF NOT EXISTS film_genre (
     film_id INTEGER REFERENCES films (film_id) ON DELETE CASCADE,
     PRIMARY KEY (film_id, genre_id)
     );
-
---CREATE TABLE IF NOT EXISTS film_MPA (
-  --  film_id INTEGER REFERENCES films (film_id) ON DELETE CASCADE,
-  --  mpa_id INTEGER REFERENCES MPA (mpa_id) ON DELETE CASCADE,
-  --  PRIMARY KEY (film_id, mpa_id)
-  --  );
-
-
