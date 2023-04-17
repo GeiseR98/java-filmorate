@@ -14,7 +14,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.mappers.FilmMapper;
-
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -53,11 +52,11 @@ public class FilmDbStorage implements FilmStorage {
                 Film film = filmMapper.mapRow(rs, filmId);
                 films.put(filmId, film);
             }
-            String genres_name = rs.getString("genre_name");
-            if (genres_name != null) {
+            String genresName = rs.getString("genre_name");
+            if (genresName != null) {
                 films.get(filmId).addFilmGenre(Genre.builder()
                         .id(rs.getInt("genre_id"))
-                        .name(genres_name).build());
+                        .name(genresName).build());
             }
         });
         return new ArrayList<>(films.values());
