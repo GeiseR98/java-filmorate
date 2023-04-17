@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserInMemoryTest {
-    private UserController controller;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private UserController controller;
 
     @BeforeEach
     public void beforeEach() {
