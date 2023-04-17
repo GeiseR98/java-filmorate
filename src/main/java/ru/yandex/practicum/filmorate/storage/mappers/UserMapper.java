@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Slf4j
 public class UserMapper implements RowMapper<User> {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        log.debug("/mapRowUser");
+        log.debug("Мапперуем строку в обьект User");
         return User.builder()
                 .id(rs.getInt("user_id"))
                 .name(rs.getString("name"))

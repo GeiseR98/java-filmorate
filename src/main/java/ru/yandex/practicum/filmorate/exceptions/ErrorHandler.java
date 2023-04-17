@@ -36,4 +36,10 @@ public class ErrorHandler {
     public String mpaNotFoundException(MpaNotFoundException exception) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(GenreNotFoundException.class)
+    public String genreNotFoundException(GenreNotFoundException exception) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(exception.getMessage());
+    }
 }

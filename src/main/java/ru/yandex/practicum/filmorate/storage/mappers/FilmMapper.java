@@ -14,7 +14,7 @@ import java.sql.SQLException;
 public class FilmMapper implements RowMapper<Film> {
     @Override
     public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
-        log.debug("/mapRowUser");
+        log.debug("Мапперуем строку в обьект Film");
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("name"))
