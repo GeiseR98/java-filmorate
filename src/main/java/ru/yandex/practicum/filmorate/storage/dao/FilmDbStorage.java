@@ -33,6 +33,7 @@ public class FilmDbStorage implements FilmStorage {
         this.jdbcTemplate = jdbcTemplate;
         this.filmMapper = filmMapper;
     }
+
     @Override
     public List<Film> getAllFilms() {
         String sqlQuery = "SELECT f.*, m.mpa_name, g.genre_id, g.genre_name " +
@@ -82,6 +83,7 @@ public class FilmDbStorage implements FilmStorage {
         addGenre(film);
         return getFilmById(film.getId());
     }
+
     private void addGenre(Film film) {
         Integer filmId = film.getId();
         jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?", filmId);
@@ -100,6 +102,7 @@ public class FilmDbStorage implements FilmStorage {
                     }
                 }
             }
+
             @Override
             public int getBatchSize() {
                 return genresSet.size();

@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
-    private int id = 0;
     private final Map<Integer, Set<Integer>> friends = new HashMap<>();
+    private int id = 0;
 
     @Override
     public List<User> getAllUsers() {

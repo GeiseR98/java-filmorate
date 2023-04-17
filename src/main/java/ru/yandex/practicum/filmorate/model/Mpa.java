@@ -10,5 +10,6 @@ import javax.validation.constraints.NotBlank;
 public class Mpa {
     private int id;
     @NotBlank(message = "название не может быть пустым")
-    private String name;}
+    private String name;
+}
 

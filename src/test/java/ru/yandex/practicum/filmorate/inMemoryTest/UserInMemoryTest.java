@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.controllersTest;
+package ru.yandex.practicum.filmorate.inMemoryTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class UserControllerTest {
+class UserInMemoryTest {
     private UserController controller;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

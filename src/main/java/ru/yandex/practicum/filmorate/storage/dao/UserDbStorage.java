@@ -22,6 +22,7 @@ import java.util.List;
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
     private final UserMapper userMapper;
+
     @Autowired
     public UserDbStorage(JdbcTemplate jdbcTemplate, UserMapper userMapper) {
         this.jdbcTemplate = jdbcTemplate;

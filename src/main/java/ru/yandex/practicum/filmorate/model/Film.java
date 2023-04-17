@@ -1,7 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import ru.yandex.practicum.filmorate.model.validator.ReleaseDateConstraint;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ import java.util.TreeSet;
 @Data
 @Builder
 public class Film {
+    private final Set<Genre> genres = new TreeSet<>(Comparator.comparingInt(Genre::getId));
     private int id;
     @NotBlank(message = "название не может быть пустым")
     private String name;
@@ -30,7 +32,7 @@ public class Film {
     private int rate;
     @NotNull
     private Mpa mpa;
-    private final Set<Genre> genres = new TreeSet<>(Comparator.comparingInt(Genre::getId));
+
     public void addFilmGenre(Genre genre) {
         genres.add(genre);
     }

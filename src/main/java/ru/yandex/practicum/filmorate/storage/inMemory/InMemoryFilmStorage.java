@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
-    private int id = 0;
     private final Map<Integer, Set<Integer>> likes = new HashMap<>();
+    private int id = 0;
 
     @Override
     public List<Film> getAllFilms() {
