@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class Mpa {
-    private int mpaId;
+    private int id;
     @NotBlank(message = "название не может быть пустым")
-    private String mpaName;}
+    private String name;}
 

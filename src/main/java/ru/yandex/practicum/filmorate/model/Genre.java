@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Builder
 public class Genre {
-    private int genreId;
+    private int id;
     @NotBlank(message = "название не может быть пустым")
-    private String genreName;
+    private String name;
 }
