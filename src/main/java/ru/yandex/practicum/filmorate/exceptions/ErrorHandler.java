@@ -30,4 +30,10 @@ public class ErrorHandler {
     public String userNotFoundException(UserNotFoundException exception) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MpaNotFoundException.class)
+    public String mpaNotFoundException(MpaNotFoundException exception) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(exception.getMessage());
+    }
 }
