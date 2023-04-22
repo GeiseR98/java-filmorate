@@ -82,7 +82,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public void addAsFriends(Integer oneId, Integer twoId) { // добавить проверку и ветвление
+    public void addAsFriends(Integer oneId, Integer twoId) {
         isUserPresent(oneId);
         isUserPresent(twoId);
         String sqlQuery = "INSERT INTO friends (friend_one_id, friend_two_id, status) " +

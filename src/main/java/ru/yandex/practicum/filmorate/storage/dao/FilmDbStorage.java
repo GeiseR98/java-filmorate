@@ -14,11 +14,13 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.mappers.FilmMapper;
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
+@SuppressWarnings("checkstyle:Regexp")
 @Repository
 @Primary
 @Slf4j
@@ -80,7 +82,17 @@ public class FilmDbStorage implements FilmStorage {
             film.setId((Integer) keyHolder.getKey());
         }
         addGenre(film);
+        addMpa(film);
         return getFilmById(film.getId());
+    }
+
+    private void addMpa(Film film) {
+        Integer filmId = film.getId();
+        Integer mpaId = film.getMpa().getId();
+        jdbcTemplate.update("DELETE FROM film_mpa WHERE film_id = ?", filmId);
+        String sqlQuery = "INSERT INTO film_mpa (film_id, mpa_id) " +
+                "VALUES (?, ?)";
+        jdbcTemplate.update(sqlQuery, filmId, mpaId);
     }
 
     private void addGenre(Film film) {
