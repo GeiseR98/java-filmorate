@@ -18,8 +18,7 @@ CREATE TABLE IF NOT EXISTS films (
     name VARCHAR(60) NOT NULL,
     description VARCHAR(200) NOT NULL,
     release_date DATE NOT NULL,
-    duration INTEGER NOT NULL,
-    mpa_id INTEGER REFERENCES mpa (mpa_id) ON DELETE CASCADE
+    duration INTEGER NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS genre (

@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.mappers.FilmMapper;
 
@@ -20,7 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
-@SuppressWarnings("checkstyle:Regexp")
 @Repository
 @Primary
 @Slf4j
@@ -37,13 +37,32 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getAllFilms() {
-        String sqlQuery = "SELECT f.*, m.mpa_name, g.genre_id, g.genre_name " +
+        String sqlQuery = "SELECT f.*, g.genre_id, g.genre_name, m.mpa_id, m.mpa_name " +
                 "FROM films AS f " +
-                //"LEFT JOIN film_MPA AS f_m ON f.film_id = f_m.film_id " +
-                "JOIN MPA AS m ON f.mpa_id = m.mpa_id " +
                 "LEFT JOIN film_genre AS f_g ON f.film_id = f_g.film_id " +
-                "LEFT JOIN genre AS g ON f_g.genre_id = g.genre_id";
+                "LEFT JOIN genre AS g ON f_g.genre_id = g.genre_id " +
+                "LEFT JOIN film_mpa AS f_m ON f.film_id = f_m.film_id " +
+                "LEFT JOIN mpa AS m ON f_m.mpa_id = m.mpa_id";
         return outputtingListFilm(sqlQuery);
+    }
+
+    @Override
+    public Film getFilmById(Integer id) {
+        String sqlQuery = "SELECT f.*, g.genre_id, g.genre_name, m.mpa_id, m.mpa_name " +
+                "FROM films AS f " +
+                "LEFT JOIN film_genre AS f_g ON f.film_id = f_g.film_id " +
+                "LEFT JOIN genre AS g ON f_g.genre_id = g.genre_id " +
+                "LEFT JOIN film_mpa AS f_m ON f.film_id = f_m.film_id " +
+                "LEFT JOIN mpa AS m ON f_m.mpa_id = m.mpa_id " +
+                "WHERE f.film_id = " + id;
+
+        List<Film> films = outputtingListFilm(sqlQuery);
+        if (!films.isEmpty()) {
+            return films.get(0);
+        } else {
+            log.debug("Фильм с номером {} не найден", id);
+            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", id));
+        }
     }
 
     private List<Film> outputtingListFilm(String sqlQuery) {
@@ -58,16 +77,23 @@ public class FilmDbStorage implements FilmStorage {
             if (genresName != null) {
                 films.get(filmId).addFilmGenre(Genre.builder()
                         .id(rs.getInt("genre_id"))
-                        .name(genresName).build());
+                        .name(genresName)
+                        .build());
             }
+            String mpaName = rs.getString("mpa_name");
+            int mpaId = rs.getInt("mpa_id");
+                films.get(filmId).setMpa(Mpa.builder()
+                        .id(mpaId)
+                        .name(mpaName)
+                        .build());
         });
         return new ArrayList<>(films.values());
     }
 
     @Override
     public Film addFilm(Film film) {
-        String sqlQuery = "INSERT INTO films (name, description, release_date, duration, mpa_id) " +
-                "VALUES(?, ?, ?, ?, ?)";
+        String sqlQuery = "INSERT INTO films (name, description, release_date, duration) " +
+                "VALUES(?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
@@ -75,7 +101,6 @@ public class FilmDbStorage implements FilmStorage {
             stmt.setString(2, film.getDescription());
             stmt.setDate(3, Date.valueOf(film.getReleaseDate()));
             stmt.setInt(4, film.getDuration());
-            stmt.setInt(5, film.getMpa().getId());
             return stmt;
         }, keyHolder);
         if (keyHolder.getKey() != null) {
@@ -124,14 +149,13 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film changeFilm(Film film) {
         String sqlQuery = "UPDATE films SET " +
-                "name = ?, description = ?, release_date = ?, duration = ?, mpa_id = ? " +
+                "name = ?, description = ?, release_date = ?, duration = ?" +
                 "WHERE film_id = ?";
         jdbcTemplate.update(sqlQuery,
                 film.getName(),
                 film.getDescription(),
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration(),
-                film.getMpa().getId(),
                 film.getId());
         addGenre(film);
         addMpa(film);
@@ -172,22 +196,7 @@ public class FilmDbStorage implements FilmStorage {
         return outputtingListFilm(sqlQuery);
     }
 
-    @Override
-    public Film getFilmById(Integer id) {
-        String sqlQuery = "SELECT f.*, m.mpa_name, g.genre_id, g.genre_name " +
-                "FROM films AS f JOIN MPA AS m ON f.mpa_id = m.mpa_id " +
-                "LEFT JOIN film_genre AS f_g ON f.film_id = f_g.film_id " +
-                "LEFT JOIN genre AS g ON f_g.genre_id = g.genre_id " +
-                "WHERE f.film_id = " + id;
 
-        List<Film> films = outputtingListFilm(sqlQuery);
-        if (!films.isEmpty()) {
-            return films.get(0);
-        } else {
-            log.debug("Фильм с номером {} не найден", id);
-            throw new FilmNotFoundException(String.format("Фильм с номером %s не найден", id));
-        }
-    }
 
     @Override
     public boolean isFilmPresent(Integer id) {
