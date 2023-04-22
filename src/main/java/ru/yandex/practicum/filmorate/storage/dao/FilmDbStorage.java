@@ -134,6 +134,7 @@ public class FilmDbStorage implements FilmStorage {
                 film.getMpa().getId(),
                 film.getId());
         addGenre(film);
+        addMpa(film);
         return getFilmById(film.getId());
     }
 
