@@ -184,12 +184,14 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getPopularFilms(Integer count) {
-        String sqlQuery = "SELECT f.*, m.mpa_name, g.genre_id, g.genre_name FROM films AS f " +
+        String sqlQuery = "SELECT f.*, g.genre_id, g.genre_name, m.mpa_id, m.mpa_name " +
+                "FROM films AS f " +
                 "LEFT JOIN (SELECT film_id, COUNT(user_id) AS likes " +
-                "FROM likes GROUP BY film_id) AS l ON f.film_id = l.film_id " +
-                "LEFT JOIN mpa AS m ON f.mpa_id = m.mpa_id " +
-                "LEFT JOIN film_genre AS fg ON f.film_id = fg.film_id " +
-                "LEFT JOIN genre AS g ON fg.genre_id = g.genre_id " +
+                "                FROM likes GROUP BY film_id) AS  l ON f.film_id = l.film_id " +
+                "LEFT JOIN film_genre AS f_g ON f.film_id = f_g.film_id " +
+                "                LEFT JOIN genre AS g ON f_g.genre_id = g.genre_id " +
+                "                LEFT JOIN film_mpa AS f_m ON f.film_id = f_m.film_id" +
+                "                LEFT JOIN mpa AS m ON f_m.mpa_id = m.mpa_id " +
                 "ORDER BY likes DESC " +
                 "LIMIT " + count;
 
