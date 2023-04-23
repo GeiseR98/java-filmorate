@@ -1,6 +1,6 @@
 # java-filmorate
 
-<img src="./.readme_assets/diagramma_2.png" width="808">
+<img src="./.readme_assets/diagramma.png" width="808">
 
 ### Описание ER-диаграммы:
 
@@ -25,6 +25,10 @@
 ###### Таблица MPA
 - ***mpa_id*** - уникальный идентификатор рейтинга
 - ***name*** - название рейтинга
+
+###### Таблица film_mpa
+- ***film_id*** - идентификатор фильма
+- ***mpa_id*** - идентификатор рейтинга
 
 ###### Таблица genre
 - ***genre_id*** - уникальный идентификатор жанра
