@@ -1,18 +1,20 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.inMemory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
-    private int id = 0;
     private final Map<Integer, Set<Integer>> friends = new HashMap<>();
+    private int id = 0;
 
     @Override
     public List<User> getAllUsers() {
@@ -76,8 +78,21 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Set<Integer> getFriends(Integer id) {
+    public List<User> getFriends(Integer id) {
         log.debug("Текущее колличество друзей у пользователя с идентификатором {}: {}", id, friends.get(id).size());
-        return friends.get(id);
+        isUserPresent(id);
+        return friends.get(id).stream()
+                .map(users::get)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> getListOfMutualFriends(Integer oneId, Integer twoId) {
+        isUserPresent(oneId);
+        isUserPresent(twoId);
+        return friends.get(oneId).stream()
+                .filter(friends.get(twoId)::contains)
+                .map(users::get)
+                .collect(Collectors.toList());
     }
 }
